@@ -21,7 +21,7 @@ function HomeScreen(){
   return(<Home />);
 }
 function BudgetsScreen(){
-  return(<Budgets />);
+  return(<Budgets />)
 }
 function NewBudgetScreen(){
   return(<NewBudget />);
