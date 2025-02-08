@@ -1,8 +1,6 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView, View, Text, StyleSheet, Button } from "react-native";
 
-import Navbar from "./Navbar";
-
 const NewBudget = () => {
   // Get user profile data
   const route = useRoute()
