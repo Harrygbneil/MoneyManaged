@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
   budgetsContainer: {
     flex: 1,
     padding: 5,
+    marginHorizontal: 10,
     marginVertical: 5,
     backgroundColor: '#ffffff',
     alignItems: 'center',
@@ -45,7 +46,6 @@ const styles = StyleSheet.create({
   budgetHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: 10,
     padding: 8,
   },
 });
