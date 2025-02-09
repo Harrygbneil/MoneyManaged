@@ -1,11 +1,59 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { SafeAreaView, View, ScrollView, Text, StyleSheet, Button, TextInput } from "react-native";
-import CheckBox from "@react-native-community/checkbox";
-import { useState, useEffect } from "react";
+import { SafeAreaView, View, Text, StyleSheet, Button, TextInput } from "react-native";
+import { useState } from "react";
+import SelectDropdown from "react-native-select-dropdown";
 
+const spendingHabits = [
+  {title: 'High'},
+  {title: 'Average'},
+  {title: 'Low'}
+];
 
 const NewBudget = () => {
-  const [toggleCheckBox, setToggleCheckBox] = useState(false)
+  // User inputs
+  const [spendingHabit, setSpendingHabit] = useState('');
+  const [income, setIncome] = useState('');
+  const [rentOrBills, setRentOrBills] = useState('');
+  const [groceries, setGroceries] = useState('');
+  const [insurance, setInsurance] = useState('');
+  const [other, setOther] = useState('');
+
+  const [successful, setSuccessful] = useState(false);
+
+  // Validate money input
+  const moneyRegex = /^(\d*)([\.]{0,1})(\d{0,2})$/;
+  const ValidateInput = (input, type) => {
+    if(moneyRegex.test(input)){
+      type == 'income' ? setIncome(input) : {}
+      type == 'rent/bills' ? setRentOrBills(input) : {}
+      type == 'groceries' ? setGroceries(input) : {}
+      type == 'insurance' ? setInsurance(input) : {}
+      type == 'other' ? setOther(input) : {}
+    }
+    else {
+
+    }
+  }
+
+  // Final check
+  const finalRegexCheck = /^(\D{0})(\d+)([\.]{1})(\d{2})$/;
+  const finalCheck = (data, spendingHabit) => {
+    setSuccessful(true)
+    data.forEach(input => {
+      if(!finalRegexCheck.test(input)) {
+        setSuccessful(false)
+      }
+    });
+    if(spendingHabit !== 'High' && spendingHabit !== 'Average' && spendingHabit !== 'Low') {
+      setSuccessful(false)
+    }
+    if(!successful) {
+      alert('Please ensure all data is in correct format "00.00" and your spending habit is selected')
+    }
+    else {
+      console.log([data, spendingHabit])
+    }
+  }
 
   // Get user profile data
   const route = useRoute()
@@ -13,6 +61,7 @@ const NewBudget = () => {
 
   const navigation = useNavigation();
   const linebreak = <View style={{height: 10}}></View>
+  const data = [income, rentOrBills, groceries, insurance, other]
 
   return (
     <SafeAreaView style={styles.newBudgetContainer}>
@@ -21,20 +70,80 @@ const NewBudget = () => {
           <Text style={{fontSize: 25, fontWeight: '600'}}>Budget info</Text>
           <Button title="Cancel" onPress={() => navigation.navigate('Budgets', { user: user })}/>
         </View>
-        <ScrollView style={styles.newBudget}>
-          <Text style={{fontStyle: 'italic', fontSize: 15}}>Please enter all of your info honestly</Text>
-          <Text style={{fontStyle: 'italic', fontSize: 15}}>Your data will not be sold to anyone or used for any purposes unrelated to this app</Text>
-          <Text style={{fontStyle: 'italic', fontSize: 15}}>Please input these based on a monthly timeframe</Text>
+        <View style={styles.newBudget}>
+          <Text style={{fontStyle: 'italic', fontSize: 15}}>
+            Please enter all of your info honestly based on a monthly timeframe. 
+            Your data will not be sold to anyone or used for any purposes unrelated to this app
+          </Text>
           {linebreak}
           <View style={styles.inputContainer}>
-            <TextInput style={styles.inputBox} placeholder='Income after tax' keyboardType='numeric'></TextInput>
-            <TextInput style={styles.inputBox} placeholder='Rent' keyboardType='numeric'></TextInput>
-            <TextInput style={styles.inputBox} placeholder='Bills' keyboardType='numeric'></TextInput>
-            <TextInput style={styles.inputBox} placeholder='Groceries' keyboardType='numeric'></TextInput>
-            <TextInput style={styles.inputBox} placeholder='Insurance' keyboardType='numeric'></TextInput>
-            <TextInput style={styles.inputBox} placeholder='Other necesseties ' keyboardType='numeric'></TextInput>
+            <Text style={{fontSize: 15, fontWeight: '500'}}>Income after tax</Text>
+            <TextInput 
+              style={styles.inputBox} 
+              placeholder='0.00' 
+              keyboardType='numeric'
+              onChangeText={input => ValidateInput(input, 'income')}
+              value={income}
+            />
+            <Text style={{fontSize: 15, fontWeight: '500'}}>Rent and/or bills</Text>
+            <TextInput 
+              style={styles.inputBox} 
+              placeholder='0.00' 
+              keyboardType='numeric'
+              onChangeText={input => ValidateInput(input, 'rent/bills')}
+              value={rentOrBills}
+            />
+            <Text style={{fontSize: 15, fontWeight: '500'}}>Groceries</Text>
+            <TextInput 
+              style={styles.inputBox} 
+              placeholder='0.00' 
+              keyboardType='numeric'
+              onChangeText={input => ValidateInput(input, 'groceries')}
+              value={groceries}
+            />
+            <Text style={{fontSize: 15, fontWeight: '500'}}>Insurance</Text>
+            <TextInput 
+              style={styles.inputBox} 
+              placeholder='0.00' 
+              keyboardType='numeric'
+              onChangeText={input => ValidateInput(input, 'insurance')}
+              value={insurance}
+            />
+            <Text style={{fontSize: 15, fontWeight: '500'}}>Other necesseties</Text>
+            <TextInput 
+              style={styles.inputBox} 
+              placeholder='0.00' 
+              keyboardType='numeric'
+              onChangeText={input => ValidateInput(input, 'other')}
+              value={other}
+            />
+            <Text style={{fontSize: 15}}>Spending habits: </Text>
+            <SelectDropdown
+              data={spendingHabits}
+              onSelect={item => {
+                setSpendingHabit(item.title)
+              }}
+              renderButton={item => {
+                return (
+                  <View style={styles.dropdownButtonStyle}>
+                    <Text style={styles.dropdownTxtStyle}>
+                      {(item && item.title) || 'Unselected'}
+                    </Text>
+                  </View>
+                )
+              }}
+              renderItem={(item, isSelected) => {
+                return (
+                  <View style={{...styles.dropdownItemStyle, ...(isSelected && {backgroundColor: '#ffffff'})}}>
+                    <Text style={styles.dropdownTxtStyle}>{item.title}</Text>
+                  </View>
+                );
+              }}
+              dropdownStyle={styles.dropdownMenuStyle} 
+            />
+            <Button title="Create budget" onPress={() => finalCheck(data, spendingHabit)}/>
           </View>
-        </ScrollView>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -74,8 +183,34 @@ const styles = StyleSheet.create({
     height: 40,
     maxWidth: '75%'
   },
-  checkbox: {
-    alignSelf: 'center',
+  dropdownButtonStyle: {
+    maxWidth: '25%',
+    height: 40,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 8,
+    marginVertical: 10,
+  },
+  dropdownTxtStyle: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#000000',
+  },
+  dropdownItemStyle: {
+    width: '100%',
+    flexDirection: 'row',
+    paddingHorizontal: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  dropdownMenuStyle: {
+    borderRadius: 10,
+    backgroundColor: '#ffffff',
   },
 });
 
