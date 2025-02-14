@@ -27,7 +27,7 @@ const Navbar = (props) => {
         </Pressable>
         <Pressable
          style={route.name === 'Profile' ? styles.activeIcon : styles.icon}
-         onPress={() => alert('profile pressed')}
+         onPress={() => navigation.navigate('Profile', { user: user })}
         >
           <Text style={{color: 'white', alignSelf: 'center'}}>Profile</Text>
         </Pressable>

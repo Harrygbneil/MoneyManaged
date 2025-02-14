@@ -3,6 +3,8 @@ import { SafeAreaView, View, Text, StyleSheet, Button, TextInput } from "react-n
 import { useState } from "react";
 import SelectDropdown from "react-native-select-dropdown";
 
+import CreateNewBudget from "./CreateNewBudget";
+
 const spendingHabits = [
   {title: 'High'},
   {title: 'Average'},
@@ -10,6 +12,13 @@ const spendingHabits = [
 ];
 
 const NewBudget = () => {
+  // Get user profile data
+  const route = useRoute()
+  const user = route.params.user;
+
+  const navigation = useNavigation();
+  const linebreak = <View style={{height: 10}}></View>
+
   // User inputs
   const [spendingHabit, setSpendingHabit] = useState('');
   const [income, setIncome] = useState('');
@@ -17,6 +26,7 @@ const NewBudget = () => {
   const [groceries, setGroceries] = useState('');
   const [insurance, setInsurance] = useState('');
   const [other, setOther] = useState('');
+  const data = [income, rentOrBills, groceries, insurance, other]
 
   const [successful, setSuccessful] = useState(false);
 
@@ -30,9 +40,6 @@ const NewBudget = () => {
       type == 'insurance' ? setInsurance(input) : {}
       type == 'other' ? setOther(input) : {}
     }
-    else {
-
-    }
   }
 
   // Final check
@@ -42,26 +49,17 @@ const NewBudget = () => {
     data.forEach(input => {
       if(!finalRegexCheck.test(input)) {
         setSuccessful(false)
+        alert('Please ensure all data is in the format "00.00"')
       }
     });
-    if(spendingHabit !== 'High' && spendingHabit !== 'Average' && spendingHabit !== 'Low') {
+    if(spendingHabit === '') {
       setSuccessful(false)
+      alert('Please ensure your spending habit is selected')
     }
-    if(!successful) {
-      alert('Please ensure all data is in correct format "00.00" and your spending habit is selected')
-    }
-    else {
-      console.log([data, spendingHabit])
+    if(successful){
+      CreateNewBudget(data, spendingHabit);
     }
   }
-
-  // Get user profile data
-  const route = useRoute()
-  const user = route.params.user;
-
-  const navigation = useNavigation();
-  const linebreak = <View style={{height: 10}}></View>
-  const data = [income, rentOrBills, groceries, insurance, other]
 
   return (
     <SafeAreaView style={styles.newBudgetContainer}>
