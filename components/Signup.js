@@ -3,7 +3,7 @@ import { SafeAreaView, Text, TextInput, StyleSheet, View, ActivityIndicator, Pre
 import { useNavigation } from "@react-navigation/native";
 import { firebaseAuth, firebaseDB } from "../configs/firebaseConfig.js";
 import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, collection } from "firebase/firestore";
 
 const Signup = () => {
   const [enteredEmail, setEnteredEmail] = useState('');

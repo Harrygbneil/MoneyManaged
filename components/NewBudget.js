@@ -1,9 +1,10 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView, View, Text, StyleSheet, Button, TextInput } from "react-native";
 import { useState } from "react";
 import SelectDropdown from "react-native-select-dropdown";
 
-import CreateNewBudget from "./CreateNewBudget";
+import { setDoc, doc, collection, query, getDocs } from "firebase/firestore";
+import { firebaseDB, firebaseAuth } from "../configs/firebaseConfig.js";
 
 const spendingHabits = [
   {title: 'High'},
@@ -13,8 +14,8 @@ const spendingHabits = [
 
 const NewBudget = () => {
   // Get user profile data
-  const route = useRoute()
-  const user = route.params.user;
+  const auth = firebaseAuth;
+  const user = auth.currentUser;
 
   const navigation = useNavigation();
   const linebreak = <View style={{height: 10}}></View>
@@ -27,8 +28,6 @@ const NewBudget = () => {
   const [insurance, setInsurance] = useState('');
   const [other, setOther] = useState('');
   const data = [income, rentOrBills, groceries, insurance, other]
-
-  const [successful, setSuccessful] = useState(false);
 
   // Validate money input
   const moneyRegex = /^(\d*)([\.]{0,1})(\d{0,2})$/;
@@ -44,21 +43,20 @@ const NewBudget = () => {
 
   // Final check
   const finalRegexCheck = /^(\D{0})(\d+)([\.]{1})(\d{2})$/;
-  const finalCheck = (data, spendingHabit) => {
-    setSuccessful(true)
-    data.forEach(input => {
+  const finalCheck = async (data, spendingHabit) => {
+    await data.forEach(input => {
       if(!finalRegexCheck.test(input)) {
-        setSuccessful(false)
-        alert('Please ensure all data is in the format "00.00"')
+        alert('Please ensure all data is in the format "00.00"');
+        return {}
       }
-    });
+    })
+
     if(spendingHabit === '') {
-      setSuccessful(false)
       alert('Please ensure your spending habit is selected')
+      return {}
     }
-    if(successful){
-      CreateNewBudget(data, spendingHabit);
-    }
+
+    CreateNewBudget(data, spendingHabit);
   }
 
   return (
@@ -146,6 +144,85 @@ const NewBudget = () => {
     </SafeAreaView>
   );
 }
+
+const CreateNewBudget = (data, spendingHabit) => {
+  // Require md5 package
+  var md5 = require('md5');
+
+  // Connect to firebase
+  const db = firebaseDB;
+  const auth = firebaseAuth;
+  const user = auth.currentUser;
+
+  // Define user inputs as seperate variables
+  const income = data[0];
+  const rentOrBills = data[1];
+  const groceries = data[2];
+  const insurance = data[3];
+  const other = data[4];
+
+  // Define hash (Budget ID)
+  const all = income + rentOrBills + groceries + insurance + other + spendingHabit
+  const hash = md5(user.uid + all)
+  
+  // Set budget to be added
+  const docData = {
+    userInputs: {
+      income: income,
+      rentOrBills: rentOrBills,
+      groceries: groceries,
+      insurance: insurance,
+      other: other,
+      spendHabits: spendingHabit
+    },
+    budget: {
+      example: 'bomboclaat'
+    }
+  }
+
+  // Retrieve user doc
+  const collectionRef = collection(db, 'users', user.uid, 'budgets');
+
+  // Check if max budgets reached and if alread exists (self-invoking async function)
+  (async () => {
+    let successful = true;
+    let count = 0;
+
+    const q = query(collectionRef);
+    const querySnapshot = await getDocs(q);
+    
+    querySnapshot.forEach(doc => {
+      count++;
+      if (count >= 5) {
+        alert('Max budgets reached');
+        successful = false;
+      }
+      if (checkBudgetID(doc.id)){
+        alert('Budget already exists');
+        successful = false;
+      }
+    });
+
+    // Add budget to db if it passes all checks
+    if (successful) {
+      setDoc(doc(collectionRef, hash), docData)
+      .then(() => {
+        alert('Budget created successfully!');
+      })
+      .catch(error => {
+        console.error(error);
+      })
+    }
+  })();
+
+  // Check if budget already exists
+  const checkBudgetID = (id) => {
+    if (id === hash) {
+      return true;
+    }
+    return false;
+  }
+};
 
 const styles = StyleSheet.create({
   newBudgetContainer: {
