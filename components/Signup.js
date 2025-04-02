@@ -3,7 +3,7 @@ import { SafeAreaView, Text, TextInput, StyleSheet, View, ActivityIndicator, Pre
 import { useNavigation } from "@react-navigation/native";
 import { firebaseAuth, firebaseDB } from "../configs/firebaseConfig.js";
 import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
-import { setDoc, doc, collection } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 
 const Signup = () => {
   const [enteredEmail, setEnteredEmail] = useState('');
@@ -28,8 +28,8 @@ const Signup = () => {
     .then(() => setUserProfile(userName, email, auth.currentUser.uid))
     .catch(error => {
       console.error(error.message); 
-      alert('Sign up failed, please ensure a valid email and password');
       setLoading(false);
+      alert('Sign up failed, please ensure a valid email and password');
     })
   };
 

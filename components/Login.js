@@ -22,15 +22,14 @@ const Login = () => {
     // If successful, get user data and navigate to Home with user data as a paramater
     // Else, Alert user to check they inputted their email/pass correctly
     await signInWithEmailAndPassword(auth, email, pass)
-    .then(userCredential => {
-      const user = userCredential.user;
-      navigation.navigate('Home', { user: user });
+    .then(() => {
+      setLoading(false);
+      navigation.navigate('Home');
     })
     .catch(error => {
-      console.log(error.message);
+      console.error(error.message);
       alert("Sign in failed, check your email and or password")
     })
-    .finally(() => setLoading(false))
   };
 
   return (  

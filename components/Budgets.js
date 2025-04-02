@@ -1,12 +1,13 @@
 import { SafeAreaView, View, StyleSheet, Text, Button } from "react-native";
-import { useRoute, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 import Navbar from "./Navbar";
+import { firebaseAuth } from "../configs/firebaseConfig.js"
 
 const Budgets = () => {
   // Get user profile data
-  const route = useRoute();
-  const user = route.params.user;
+  const auth = firebaseAuth;
+  const user = auth.currentUser;
 
   const navigation = useNavigation();
 
@@ -15,13 +16,13 @@ const Budgets = () => {
       <View>
         <View style={styles.budgetHeader}>
           <Text style={{fontSize: 25, fontWeight: '600'}}>Budgets</Text>
-          <Button title="New budget" onPress={() => navigation.navigate('NewBudget', { user: user })}/>
+          <Button title="New budget" onPress={() => navigation.navigate('NewBudget')}/>
         </View>
         <View style={styles.budgets}>
           <Text>test to see if user data is carried</Text>
           <Text>{user.displayName}</Text>
         </View>
-        <Navbar user={user}/>
+        <Navbar />
       </View>
     </SafeAreaView>
   );

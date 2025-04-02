@@ -1,27 +1,18 @@
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView, View, Text, StyleSheet, Button, TextInput } from "react-native";
 import { useState } from "react";
-import SelectDropdown from "react-native-select-dropdown";
 
 import { setDoc, doc, collection, query, getDocs } from "firebase/firestore";
 import { firebaseDB, firebaseAuth } from "../configs/firebaseConfig.js";
 
-const spendingHabits = [
-  {title: 'High'},
-  {title: 'Average'},
-  {title: 'Low'}
-];
-
 const NewBudget = () => {
   // Get user profile data
   const auth = firebaseAuth;
-  const user = auth.currentUser;
 
   const navigation = useNavigation();
   const linebreak = <View style={{height: 10}}></View>
 
   // User inputs
-  const [spendingHabit, setSpendingHabit] = useState('');
   const [income, setIncome] = useState('');
   const [rentOrBills, setRentOrBills] = useState('');
   const [groceries, setGroceries] = useState('');
@@ -44,19 +35,17 @@ const NewBudget = () => {
   // Final check
   const finalRegexCheck = /^(\D{0})(\d+)([\.]{1})(\d{2})$/;
   const finalCheck = async (data, spendingHabit) => {
+    let successful = true;
     await data.forEach(input => {
       if(!finalRegexCheck.test(input)) {
         alert('Please ensure all data is in the format "00.00"');
-        return {}
+        successful = false;
       }
     })
 
-    if(spendingHabit === '') {
-      alert('Please ensure your spending habit is selected')
-      return {}
+    if (successful) {
+      CreateNewBudget(data, spendingHabit);
     }
-
-    CreateNewBudget(data, spendingHabit);
   }
 
   return (
@@ -64,7 +53,7 @@ const NewBudget = () => {
       <View>
         <View style={styles.newBudgetHeader}>
           <Text style={{fontSize: 25, fontWeight: '600'}}>Budget info</Text>
-          <Button title="Cancel" onPress={() => navigation.navigate('Budgets', { user: user })}/>
+          <Button title="Cancel" onPress={() => navigation.navigate('Budgets')}/>
         </View>
         <View style={styles.newBudget}>
           <Text style={{fontStyle: 'italic', fontSize: 15}}>
@@ -113,31 +102,7 @@ const NewBudget = () => {
               onChangeText={input => ValidateInput(input, 'other')}
               value={other}
             />
-            <Text style={{fontSize: 15}}>Spending habits: </Text>
-            <SelectDropdown
-              data={spendingHabits}
-              onSelect={item => {
-                setSpendingHabit(item.title)
-              }}
-              renderButton={item => {
-                return (
-                  <View style={styles.dropdownButtonStyle}>
-                    <Text style={styles.dropdownTxtStyle}>
-                      {(item && item.title) || 'Unselected'}
-                    </Text>
-                  </View>
-                )
-              }}
-              renderItem={(item, isSelected) => {
-                return (
-                  <View style={{...styles.dropdownItemStyle, ...(isSelected && {backgroundColor: '#ffffff'})}}>
-                    <Text style={styles.dropdownTxtStyle}>{item.title}</Text>
-                  </View>
-                );
-              }}
-              dropdownStyle={styles.dropdownMenuStyle} 
-            />
-            <Button title="Create budget" onPress={() => finalCheck(data, spendingHabit)}/>
+            <Button title="Create budget" onPress={() => finalCheck(data)}/>
           </View>
         </View>
       </View>
@@ -145,7 +110,7 @@ const NewBudget = () => {
   );
 }
 
-const CreateNewBudget = (data, spendingHabit) => {
+const CreateNewBudget = (data) => {
   // Require md5 package
   var md5 = require('md5');
 
@@ -162,23 +127,8 @@ const CreateNewBudget = (data, spendingHabit) => {
   const other = data[4];
 
   // Define hash (Budget ID)
-  const all = income + rentOrBills + groceries + insurance + other + spendingHabit
+  const all = income + rentOrBills + groceries + insurance + other
   const hash = md5(user.uid + all)
-  
-  // Set budget to be added
-  const docData = {
-    userInputs: {
-      income: income,
-      rentOrBills: rentOrBills,
-      groceries: groceries,
-      insurance: insurance,
-      other: other,
-      spendHabits: spendingHabit
-    },
-    budget: {
-      example: 'bomboclaat'
-    }
-  }
 
   // Retrieve user doc
   const collectionRef = collection(db, 'users', user.uid, 'budgets');
@@ -205,6 +155,7 @@ const CreateNewBudget = (data, spendingHabit) => {
 
     // Add budget to db if it passes all checks
     if (successful) {
+      const docData = setDocData();
       setDoc(doc(collectionRef, hash), docData)
       .then(() => {
         alert('Budget created successfully!');
@@ -216,11 +167,38 @@ const CreateNewBudget = (data, spendingHabit) => {
   })();
 
   // Check if budget already exists
-  const checkBudgetID = (id) => {
+  const checkBudgetID = id => {
     if (id === hash) {
       return true;
     }
     return false;
+  }
+
+   // Set budget to be added
+  const setDocData = () => {
+    // Budget math
+    const n = Number;
+    const incN = n(income)*100; 
+    const rentN = n(rentOrBills)*100;
+    const groceriesN = n(groceries)*100;
+    const insuranceN = n(insurance)*100;
+    const otherN = n(other)*100;
+    console.log(incN, rentN, groceriesN, insuranceN, otherN);
+
+    const left = incN - rentN - groceriesN - insuranceN - otherN;
+
+    // Set budget to be added
+    let docData = {
+      income: incN,
+      rentOrBills: rentN,
+      groceries: groceriesN,
+      insurance: insuranceN,
+      other: otherN,
+
+      left: left,
+    }
+
+    return docData;
   }
 };
 
@@ -257,35 +235,6 @@ const styles = StyleSheet.create({
     padding: 8,
     height: 40,
     maxWidth: '75%'
-  },
-  dropdownButtonStyle: {
-    maxWidth: '25%',
-    height: 40,
-    backgroundColor: '#ffffff',
-    borderRadius: 10,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 8,
-    marginVertical: 10,
-  },
-  dropdownTxtStyle: {
-    flex: 1,
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#000000',
-  },
-  dropdownItemStyle: {
-    width: '100%',
-    flexDirection: 'row',
-    paddingHorizontal: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 8,
-  },
-  dropdownMenuStyle: {
-    borderRadius: 10,
-    backgroundColor: '#ffffff',
   },
 });
 

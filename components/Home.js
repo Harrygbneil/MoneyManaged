@@ -1,11 +1,12 @@
 import { StyleSheet, Text, SafeAreaView, View } from 'react-native';
-import { useRoute } from '@react-navigation/native';
 import Navbar from './Navbar';
+
+import { firebaseAuth } from "../configs/firebaseConfig.js"
 
 const Home = () => {
   // Get user profile data
-  const route = useRoute();
-  const user = route.params.user;
+  const auth = firebaseAuth;
+  const user = auth.currentUser;
 
   return (
     <SafeAreaView style={styles.homeContainer}>
@@ -18,7 +19,7 @@ const Home = () => {
           <Text>No budgets!</Text>
           {/* This will contain summarised goals */}
         </View>
-        <Navbar user={user}/>
+        <Navbar />
       </View>
     </SafeAreaView>
   )

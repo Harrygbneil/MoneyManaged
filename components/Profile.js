@@ -2,11 +2,12 @@ import { SafeAreaView, View, StyleSheet, Text, Button } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
 import Navbar from "./Navbar";
+import { firebaseAuth } from "../configs/firebaseConfig";
 
 const Profile = () => {
   // Get user profile data
-  const route = useRoute();
-  const user = route.params.user;
+  const auth = firebaseAuth;
+  const user = auth.currentUser;
   
   return (  
     <SafeAreaView style={styles.profileContainer}>
@@ -14,7 +15,7 @@ const Profile = () => {
         <View style={styles.profileDetails}>
           <Text>{user.displayName}'s Profile</Text>
         </View>
-        <Navbar user={user}/>
+        <Navbar />
       </View>
     </SafeAreaView>
   );
