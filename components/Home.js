@@ -2,6 +2,7 @@ import { StyleSheet, Text, SafeAreaView, View } from 'react-native';
 import Navbar from './Navbar';
 
 import { firebaseAuth } from "../configs/firebaseConfig.js"
+import SummarisedBudgets from './SummarisedBudgets.js';
 
 const Home = () => {
   // Get user profile data
@@ -16,8 +17,7 @@ const Home = () => {
           <Text style={{fontSize: 15, fontStyle: 'italic', color: 'white'}}>If you have any questions, you can reach us from the settings page</Text>
         </View>
         <View style={styles.summarisedBudgets}>
-          <Text>No budgets!</Text>
-          {/* This will contain summarised goals */}
+          <SummarisedBudgets />
         </View>
         <Navbar />
       </View>

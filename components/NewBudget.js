@@ -155,9 +155,10 @@ const CreateNewBudget = (data) => {
 
     // Add budget to db if it passes all checks
     if (successful) {
-      const docData = setDocData();
+      const docData = setDocData(count);
       setDoc(doc(collectionRef, hash), docData)
       .then(() => {
+
         alert('Budget created successfully!');
       })
       .catch(error => {
@@ -175,7 +176,7 @@ const CreateNewBudget = (data) => {
   }
 
    // Set budget to be added
-  const setDocData = () => {
+  const setDocData = (id) => {
     // Budget math
     const n = Number;
     const incN = n(income)*100; 
@@ -183,7 +184,6 @@ const CreateNewBudget = (data) => {
     const groceriesN = n(groceries)*100;
     const insuranceN = n(insurance)*100;
     const otherN = n(other)*100;
-    console.log(incN, rentN, groceriesN, insuranceN, otherN);
 
     const left = incN - rentN - groceriesN - insuranceN - otherN;
 
@@ -196,6 +196,7 @@ const CreateNewBudget = (data) => {
       other: otherN,
 
       left: left,
+      id: id
     }
 
     return docData;

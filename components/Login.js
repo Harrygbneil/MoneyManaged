@@ -36,8 +36,21 @@ const Login = () => {
     <SafeAreaView style={styles.loginContainer}>
       <Text style={{fontSize: 60, textAlign: 'center', marginBottom: 10}}>Login</Text>
       <View style={styles.inputBoxContainer}>
-        <TextInput style={styles.inputBox} placeholder='Email' onChangeText={setEnteredEmail} value={enteredEmail}></TextInput>
-        <TextInput style={styles.inputBox} placeholder='Password' onChangeText={setEnteredPassword} value={enteredPassword}></TextInput>
+        <TextInput 
+          style={styles.inputBox} 
+          placeholder='Email' 
+          onChangeText={setEnteredEmail} 
+          value={enteredEmail}
+          autoCapitalize='none'
+        />
+        <TextInput 
+          style={styles.inputBox} 
+          placeholder='Password' 
+          onChangeText={setEnteredPassword} 
+          value={enteredPassword}
+          secureTextEntry={true}
+          autoCapitalize='none'
+        />
       </View>
       <View style={styles.buttonContainer}>
         <Pressable
