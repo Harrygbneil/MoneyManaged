@@ -1,11 +1,13 @@
 import { StyleSheet, Text, SafeAreaView, View } from 'react-native';
-import { useRoute } from '@react-navigation/native';
 import Navbar from './Navbar';
+
+import { firebaseAuth } from "../configs/firebaseConfig.js"
+import SummarisedBudgets from './SummarisedBudgets.js';
 
 const Home = () => {
   // Get user profile data
-  const route = useRoute();
-  const user = route.params.user;
+  const auth = firebaseAuth;
+  const user = auth.currentUser;
 
   return (
     <SafeAreaView style={styles.homeContainer}>
@@ -15,10 +17,9 @@ const Home = () => {
           <Text style={{fontSize: 15, fontStyle: 'italic', color: 'white'}}>If you have any questions, you can reach us from the settings page</Text>
         </View>
         <View style={styles.summarisedBudgets}>
-          <Text>No budgets!</Text>
-          {/* This will contain summarised goals */}
+          <SummarisedBudgets />
         </View>
-        <Navbar user={user}/>
+        <Navbar />
       </View>
     </SafeAreaView>
   )
@@ -29,6 +30,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 5,
     marginVertical: 5,
+    marginHorizontal: 10,
     backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center'

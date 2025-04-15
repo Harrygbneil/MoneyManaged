@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Budgets from './components/Budgets';
 import NewBudget from './components/NewBudget';
+import Profile from './components/Profile';
 
 // Create stacknavigator
 const Stack = createNativeStackNavigator();
@@ -14,17 +15,25 @@ const Stack = createNativeStackNavigator();
 function LoginScreen(){
   return(<Login />);
 }
+
 function SignupScreen(){
   return(<Signup />)
 }
+
 function HomeScreen(){
   return(<Home />);
 }
+
 function BudgetsScreen(){
   return(<Budgets />)
 }
+
 function NewBudgetScreen(){
   return(<NewBudget />);
+}
+
+function ProfileScreen(){
+  return(<Profile />);
 }
 
 export default function App() {
@@ -40,7 +49,9 @@ export default function App() {
           <Stack.Screen name="Home" component={HomeScreen}/>
           <Stack.Screen name="Budgets" component={BudgetsScreen}/>
           <Stack.Screen name="NewBudget" component={NewBudgetScreen}/>
+          <Stack.Screen name="Profile" component={ProfileScreen}/>
         </Stack.Navigator>
+        
     </NavigationContainer>
     </>
   );
