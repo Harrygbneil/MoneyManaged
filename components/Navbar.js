@@ -6,7 +6,7 @@ const Navbar = () => {
   const route = useRoute();
 
   // the line that seperates the navbar from the app
-  const navbarSeperator = <SafeAreaView style={{ borderWidth: 1, backgroundColor: '#000000', marginTop: 8 }}></SafeAreaView>;
+  const navbarSeperator = <SafeAreaView style={{ borderWidth: 1, backgroundColor: '#000000', marginVertical: 6 }}></SafeAreaView>;
 
   return (
     <>
@@ -16,25 +16,25 @@ const Navbar = () => {
          style={route.name === 'Home' ? styles.activeIcon : styles.icon}
          onPress={() => navigation.navigate('Home')}
         >
-          <Text style={{color: 'white', alignSelf: 'center'}}>Home</Text>
+          <Text style={styles.text}>Home</Text>
         </Pressable>
         <Pressable
          style={route.name === 'Budgets' ? styles.activeIcon : styles.icon}
          onPress={() => navigation.navigate('Budgets')}
         >
-          <Text style={{color: 'white', alignSelf: 'center'}}>Budgets</Text>
+          <Text style={styles.text}>Budgets</Text>
         </Pressable>
         <Pressable
          style={route.name === 'Profile' ? styles.activeIcon : styles.icon}
          onPress={() => navigation.navigate('Profile')}
         >
-          <Text style={{color: 'white', alignSelf: 'center'}}>Profile</Text>
+          <Text style={styles.text}>Profile</Text>
         </Pressable>
         <Pressable
          style={route.name === 'Settings' ? styles.activeIcon : styles.icon}
          onPress={() => alert('settings pressed')}
         >
-          <Text style={{color: 'white', alignSelf: 'center'}}>Settings</Text>
+          <Text style={styles.text}>Settings</Text>
         </Pressable>
       </SafeAreaView>
     </>  
@@ -47,30 +47,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    backgroundColor: '#52FFB8',
     minWidth: '100%',
     maxWidth: '100%',
-    minHeight: '8%',
-    maxHeight: '8%',
+    minHeight: '7%',
+    maxHeight: '7%',
   },
   icon: {
-    backgroundColor: '#DF2935',
+    backgroundColor: '#c0c0c0',
     borderRadius: 10,
     padding: 10,
     minWidth: '20%',
     maxWidth: '23.75%',
     minHeight: '90%',
     maxHeight: '90%',
+    justifyContent: 'center'
   },
   activeIcon: {
-    backgroundColor: '#e7626a',
+    backgroundColor: '#909090',
     borderRadius: 10,
     padding: 10,
     minWidth: '20%',
     maxWidth: '23.75%',
     minHeight: '90%',
     maxHeight: '90%',
+    justifyContent: 'center'
   },
+  text: {
+    alignSelf: 'center',
+    fontWeight: 800,
+  }
 });
  
 export default Navbar;

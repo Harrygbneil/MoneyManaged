@@ -6,11 +6,10 @@ import { setDoc, doc, collection, query, getDocs } from "firebase/firestore";
 import { firebaseDB, firebaseAuth } from "../configs/firebaseConfig.js";
 
 const NewBudget = () => {
-  // Get user profile data
-  const auth = firebaseAuth;
-
   const navigation = useNavigation();
-  const linebreak = <View style={{height: 10}}></View>
+  const linebreak = <View style={{height: 20}}></View>
+
+  const headerbreak = <SafeAreaView style={{ borderWidth: 1, backgroundColor: '#000000', marginTop: 8 }}></SafeAreaView>;
 
   // User inputs
   const [income, setIncome] = useState('');
@@ -55,6 +54,7 @@ const NewBudget = () => {
           <Text style={{fontSize: 25, fontWeight: '600'}}>Budget info</Text>
           <Button title="Cancel" onPress={() => navigation.navigate('Budgets')}/>
         </View>
+        {headerbreak}
         <View style={styles.newBudget}>
           <Text style={{fontStyle: 'italic', fontSize: 15}}>
             Please enter all of your info honestly based on a monthly timeframe. 
@@ -102,6 +102,7 @@ const NewBudget = () => {
               onChangeText={input => ValidateInput(input, 'other')}
               value={other}
             />
+            {linebreak}
             <Button title="Create budget" onPress={() => finalCheck(data)}/>
           </View>
         </View>
@@ -209,7 +210,6 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: 5,
     marginHorizontal: 10,
-    backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
@@ -220,9 +220,10 @@ const styles = StyleSheet.create({
   },
   newBudget: {
     flex: 9,
+    marginTop: 8,
     padding: 8,
     borderRadius: 10,
-    backgroundColor: '#FECDAA',
+    backgroundColor: '#e0e0e0',
     minWidth: '100%',
   },
   inputContainer: {
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
   inputBox: {
     borderRadius: 5,
     borderWidth: 2,
-    marginVertical: 10,
+    marginVertical: 15,
     padding: 8,
     height: 40,
     maxWidth: '75%'

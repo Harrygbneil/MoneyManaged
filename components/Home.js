@@ -9,13 +9,16 @@ const Home = () => {
   const auth = firebaseAuth;
   const user = auth.currentUser;
 
+  const linebreak = <SafeAreaView style={{ borderWidth: 1, backgroundColor: '#000000', marginTop: 8 }}></SafeAreaView>;
+
   return (
     <SafeAreaView style={styles.homeContainer}>
       <View>
         <View style={styles.welcomeMessage}>
-          <Text style={{fontSize: 20, fontWeight: '600', color: 'white'}}>Welcome {user.displayName}!</Text>
-          <Text style={{fontSize: 15, fontStyle: 'italic', color: 'white'}}>If you have any questions, you can reach us from the settings page</Text>
+          <Text style={{fontSize: 25, fontWeight: '800'}}>Welcome {user.displayName}!</Text>
+          <Text style={{fontSize: 15, fontStyle: 'italic'}}>If you have any questions, you can reach us from the settings page</Text>
         </View>
+        {linebreak}
         <View style={styles.summarisedBudgets}>
           <SummarisedBudgets />
         </View>
@@ -39,17 +42,12 @@ const styles = StyleSheet.create({
     height: 80,
     padding: 8,
     justifyContent: 'flex-start',
-    borderRadius: 10,
-    backgroundColor: '#6A6B83',
-    borderColor: '#6A6B83'
   },
   summarisedBudgets: {
     flex: 9,
-    marginTop: 15,
-    padding: 8,
+    marginTop: 5,
     borderRadius: 10,
     justifyContent: 'flex-start',
-    backgroundColor: '#FECDAA'
   },
 });
  
