@@ -1,19 +1,45 @@
 import { SafeAreaView, View, StyleSheet, Text, Button } from "react-native";
-import { useRoute } from "@react-navigation/native";
 
 import Navbar from "./Navbar";
 import { firebaseAuth } from "../configs/firebaseConfig";
+import { useNavigation } from "@react-navigation/native";
 
 const Profile = () => {
   // Get user profile data
   const auth = firebaseAuth;
   const user = auth.currentUser;
-  
-  return (  
+  const navigation = useNavigation();
+
+  const linebreak = <SafeAreaView style={{ borderWidth: 1, backgroundColor: '#000000', marginTop: 8 }}></SafeAreaView>;
+
+  const logOut = () => {
+    auth.signOut();
+    navigation.navigate("Login");
+  }
+  return (
     <SafeAreaView style={styles.profileContainer}>
       <View>
         <View style={styles.profileDetails}>
-          <Text>{user.displayName}'s Profile</Text>
+          <View style={styles.profileHead}>
+            <Text style={{ fontSize: 25, fontWeight: '600' }}>{user.displayName}'s Profile</Text>
+          </View>
+          {linebreak}
+          <View style={styles.info}>
+            <Text style={styles.infoText}>
+              Email: {"\n" + user.email}
+            </Text>
+            <Text style={styles.infoText}>
+              Email Verified: {(user.emailVerified) ? "\nYes" : "\nNo"}
+            </Text>
+            <Text style={styles.infoText}>
+              Username: {"\n" + user.displayName}
+            </Text>
+            <Text style={styles.infoText}>
+              Your Unique ID: {"\n" + user.uid}
+            </Text>
+
+            <Button title="Log out" onPress={() => logOut()} />
+          </View>
         </View>
         <Navbar />
       </View>
@@ -32,14 +58,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   profileDetails: {
-    flex: 9,
-    marginTop: 15,
-    padding: 8,
-    borderRadius: 10,
+    flex: 1,
     justifyContent: 'flex-start',
-    backgroundColor: '#FECDAA'
   },
+  profileHead: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 8,
+  },
+  info: {
+    padding: 15,
+    marginVertical: 8,
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
+  infoText: {
+    marginBottom: 15,
+    fontSize: 20,
+    fontWeight: 400,
+    backgroundColor: "#c0c0c0",
+    borderRadius: 10,
+    padding: 8,
+  }
 });
- 
- 
+
+
 export default Profile;

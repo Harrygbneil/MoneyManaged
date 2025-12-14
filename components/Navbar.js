@@ -13,31 +13,31 @@ const Navbar = () => {
       {navbarSeperator}
       <SafeAreaView style={styles.navbarContainer}>
         <Pressable
-         style={route.name === 'Home' ? styles.activeIcon : styles.icon}
-         onPress={() => navigation.navigate('Home')}
+          style={route.name === 'Home' ? styles.activeIcon : styles.icon}
+          onPress={() => navigation.navigate('Home')}
         >
           <Text style={styles.text}>Home</Text>
         </Pressable>
         <Pressable
-         style={route.name === 'Budgets' ? styles.activeIcon : styles.icon}
-         onPress={() => navigation.navigate('Budgets')}
+          style={route.name === 'Budgets' ? styles.activeIcon : styles.icon}
+          onPress={() => navigation.navigate('Budgets')}
         >
           <Text style={styles.text}>Budgets</Text>
         </Pressable>
         <Pressable
-         style={route.name === 'Profile' ? styles.activeIcon : styles.icon}
-         onPress={() => navigation.navigate('Profile')}
+          style={route.name === 'Profile' ? styles.activeIcon : styles.icon}
+          onPress={() => navigation.navigate('Profile')}
         >
           <Text style={styles.text}>Profile</Text>
         </Pressable>
         <Pressable
-         style={route.name === 'Settings' ? styles.activeIcon : styles.icon}
-         onPress={() => alert('settings pressed')}
+          style={route.name === 'Settings' ? styles.activeIcon : styles.icon}
+          onPress={() => navigation.navigate('Settings')}
         >
           <Text style={styles.text}>Settings</Text>
         </Pressable>
       </SafeAreaView>
-    </>  
+    </>
   );
 }
 
@@ -77,5 +77,5 @@ const styles = StyleSheet.create({
     fontWeight: 800,
   }
 });
- 
+
 export default Navbar;
