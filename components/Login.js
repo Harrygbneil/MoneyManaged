@@ -22,31 +22,31 @@ const Login = () => {
     // If successful, get user data and navigate to Home with user data as a paramater
     // Else, Alert user to check they inputted their email/pass correctly
     await signInWithEmailAndPassword(auth, email, pass)
-    .then(() => {
-      setLoading(false);
-      navigation.navigate('Home');
-    })
-    .catch(error => {
-      console.error(error.message);
-      alert("Sign in failed, check your email and or password")
-    })
+      .then(() => {
+        setLoading(false);
+        navigation.navigate('Home');
+      })
+      .catch(error => {
+        console.error(error.message);
+        alert("Sign in failed, check your email and or password")
+      })
   };
 
-  return (  
+  return (
     <SafeAreaView style={styles.loginContainer}>
-      <Text style={{fontSize: 60, textAlign: 'center', marginBottom: 10}}>Login</Text>
+      <Text style={{ fontSize: 60, textAlign: 'center', marginBottom: 10 }}>Login</Text>
       <View style={styles.inputBoxContainer}>
-        <TextInput 
-          style={styles.inputBox} 
-          placeholder='Email' 
-          onChangeText={setEnteredEmail} 
+        <TextInput
+          style={styles.inputBox}
+          placeholder='Email'
+          onChangeText={setEnteredEmail}
           value={enteredEmail}
           autoCapitalize='none'
         />
-        <TextInput 
-          style={styles.inputBox} 
-          placeholder='Password' 
-          onChangeText={setEnteredPassword} 
+        <TextInput
+          style={styles.inputBox}
+          placeholder='Password'
+          onChangeText={setEnteredPassword}
           value={enteredPassword}
           secureTextEntry={true}
           autoCapitalize='none'
@@ -54,34 +54,34 @@ const Login = () => {
       </View>
       <View style={styles.buttonContainer}>
         <Pressable
-          onPressIn={() => setLoginPressed(true)} 
+          onPressIn={() => setLoginPressed(true)}
           onPressOut={() => {
             signIn(enteredEmail, enteredPassword)
             setLoginPressed(false)
-          }} 
+          }}
           style={() => loginPressed ? styles.pressedPressable : styles.pressable}
         >
           <Text style={styles.pressableText}>Login</Text>
         </Pressable>
         <Pressable
-          onPressIn={() => setSignupPressed(true)} 
+          onPressIn={() => setSignupPressed(true)}
           onPressOut={() => {
             navigation.navigate('Signup')
             setSignupPressed(false)
-          }} 
+          }}
           style={() => signupPressed ? styles.pressedPressable : styles.pressable}
         >
           <Text style={styles.pressableText}>Go to Signup</Text>
         </Pressable>
       </View>
       {/* Show loading indicator while attempting Login */}
-      {loading ? (<ActivityIndicator size='large' color='#0000ff'/>) : (<></>)}
+      {loading ? (<ActivityIndicator size='large' color='#0000ff' />) : (<></>)}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  loginContainer: {  
+  loginContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1

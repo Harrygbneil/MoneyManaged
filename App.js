@@ -8,51 +8,57 @@ import Signup from './components/Signup';
 import Budgets from './components/Budgets';
 import NewBudget from './components/NewBudget';
 import Profile from './components/Profile';
+import Settings from './components/Settings';
 
 // Create stacknavigator
 const Stack = createNativeStackNavigator();
 
-function LoginScreen(){
-  return(<Login />);
+function LoginScreen() {
+  return (<Login />);
 }
 
-function SignupScreen(){
-  return(<Signup />)
+function SignupScreen() {
+  return (<Signup />)
 }
 
-function HomeScreen(){
-  return(<Home />);
+function HomeScreen() {
+  return (<Home />);
 }
 
-function BudgetsScreen(){
-  return(<Budgets />)
+function BudgetsScreen() {
+  return (<Budgets />)
 }
 
-function NewBudgetScreen(){
-  return(<NewBudget />);
+function NewBudgetScreen() {
+  return (<NewBudget />);
 }
 
-function ProfileScreen(){
-  return(<Profile />);
+function ProfileScreen() {
+  return (<Profile />);
+}
+
+function SettingsScreen() {
+  return (<Settings />);
 }
 
 export default function App() {
   return (
     <>
       {/* Set the status bar to be visible on app */}
-      <StatusBar barStyle='dark-content' backgroundColor='transparent'/> 
+      <StatusBar barStyle='dark-content' backgroundColor='transparent' />
       <NavigationContainer theme={MyTheme}>
         {/* Initialise stack navigator with Login as the intial screen */}
-        <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false, gestureEnabled: false, animation: 'simple_push'}}>
-          <Stack.Screen name="Login" component={LoginScreen}/>
-          <Stack.Screen name="Signup" component={SignupScreen}/>
-          <Stack.Screen name="Home" component={HomeScreen}/>
-          <Stack.Screen name="Budgets" component={BudgetsScreen}/>
-          <Stack.Screen name="NewBudget" component={NewBudgetScreen}/>
-          <Stack.Screen name="Profile" component={ProfileScreen}/>
+        <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false, gestureEnabled: false, animation: 'simple_push' }}>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Signup" component={SignupScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Budgets" component={BudgetsScreen} />
+          <Stack.Screen name="NewBudget" component={NewBudgetScreen} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="Settings" component={SettingsScreen} />
         </Stack.Navigator>
-        
-    </NavigationContainer>
+
+      </NavigationContainer>
     </>
   );
 }

@@ -7,6 +7,8 @@ import BudgetsLoader from "./BudgetsLoader.js";
 const Budgets = () => {
   const navigation = useNavigation();
 
+  const linebreak = <SafeAreaView style={{ borderWidth: 1, backgroundColor: '#000000', marginTop: 8 }}></SafeAreaView>;
+
   return (
     <SafeAreaView style={styles.budgetsContainer}>
       <View>
@@ -14,6 +16,7 @@ const Budgets = () => {
           <Text style={{fontSize: 25, fontWeight: '600'}}>Budgets</Text>
           <Button title="New budget" onPress={() => navigation.navigate('NewBudget')}/>
         </View>
+        {linebreak}
         <View style={styles.budgets}>
           <BudgetsLoader />
         </View>
@@ -35,9 +38,7 @@ const styles = StyleSheet.create({
   },
   budgets: {
     flex: 9,
-    padding: 8,
     borderRadius: 10,
-    backgroundColor: '#FECDAA'
   },
   budgetHeader: {
     flexDirection: 'row',
