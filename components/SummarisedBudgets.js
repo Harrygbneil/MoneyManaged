@@ -91,8 +91,8 @@ const SummarisedBudgets = () => {
               <Text style={[styles.text]}>Expenditures: {format.format((groceries + insurance + other)/100)}</Text>
               <Text style={[styles.text]}>Leftover: {format.format(left/100)}</Text>
             </View>
-            <View style={{flex: 1}}>
-              <Text style={[styles.text]}>You have no leftover money with this plan, see budgets page for more details</Text>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+              <Text style={[styles.text, {alignSelf: 'center'}]}>You have no leftover money with this plan, see budgets page for more details</Text>
             </View>
           </View>
         </>)
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   item: {
-    backgroundColor: '#909090',
+    backgroundColor: 'rgb(168, 168, 168)',
     padding: 15,
     borderRadius: 10,
     marginVertical: 8,

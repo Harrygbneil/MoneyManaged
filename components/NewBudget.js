@@ -7,7 +7,7 @@ import { firebaseDB, firebaseAuth } from "../configs/firebaseConfig.js";
 
 const NewBudget = () => {
   const navigation = useNavigation();
-  const linebreak = <View style={{height: 20}}></View>
+  const linebreak = <View style={{ height: 20 }}></View>
 
   const headerbreak = <SafeAreaView style={{ borderWidth: 1, backgroundColor: '#000000', marginTop: 8 }}></SafeAreaView>;
 
@@ -22,7 +22,7 @@ const NewBudget = () => {
   // Validate money input
   const moneyRegex = /^(\d*)([\.]{0,1})(\d{0,2})$/;
   const ValidateInput = (input, type) => {
-    if(moneyRegex.test(input)){
+    if (moneyRegex.test(input)) {
       type == 'income' ? setIncome(input) : {}
       type == 'rent/bills' ? setRentOrBills(input) : {}
       type == 'groceries' ? setGroceries(input) : {}
@@ -36,7 +36,7 @@ const NewBudget = () => {
   const finalCheck = async (data, spendingHabit) => {
     let successful = true;
     await data.forEach(input => {
-      if(!finalRegexCheck.test(input)) {
+      if (!finalRegexCheck.test(input)) {
         alert('Please ensure all data is in the format "00.00"');
         successful = false;
       }
@@ -47,67 +47,87 @@ const NewBudget = () => {
     }
   }
 
+  const auth = firebaseAuth;
+  const user = auth.currentUser;
+
   return (
-    <SafeAreaView style={styles.newBudgetContainer}>
-      <View>
-        <View style={styles.newBudgetHeader}>
-          <Text style={{fontSize: 25, fontWeight: '600'}}>Budget info</Text>
-          <Button title="Cancel" onPress={() => navigation.navigate('Budgets')}/>
-        </View>
-        {headerbreak}
-        <View style={styles.newBudget}>
-          <Text style={{fontStyle: 'italic', fontSize: 15}}>
-            Please enter all of your info honestly based on a monthly timeframe. 
-            Your data will not be sold to anyone or used for any purposes unrelated to this app
-          </Text>
-          {linebreak}
-          <View style={styles.inputContainer}>
-            <Text style={{fontSize: 15, fontWeight: '500'}}>Income after tax</Text>
-            <TextInput 
-              style={styles.inputBox} 
-              placeholder='0.00' 
-              keyboardType='numeric'
-              onChangeText={input => ValidateInput(input, 'income')}
-              value={income}
-            />
-            <Text style={{fontSize: 15, fontWeight: '500'}}>Rent and/or bills</Text>
-            <TextInput 
-              style={styles.inputBox} 
-              placeholder='0.00' 
-              keyboardType='numeric'
-              onChangeText={input => ValidateInput(input, 'rent/bills')}
-              value={rentOrBills}
-            />
-            <Text style={{fontSize: 15, fontWeight: '500'}}>Groceries</Text>
-            <TextInput 
-              style={styles.inputBox} 
-              placeholder='0.00' 
-              keyboardType='numeric'
-              onChangeText={input => ValidateInput(input, 'groceries')}
-              value={groceries}
-            />
-            <Text style={{fontSize: 15, fontWeight: '500'}}>Insurance</Text>
-            <TextInput 
-              style={styles.inputBox} 
-              placeholder='0.00' 
-              keyboardType='numeric'
-              onChangeText={input => ValidateInput(input, 'insurance')}
-              value={insurance}
-            />
-            <Text style={{fontSize: 15, fontWeight: '500'}}>Other necesseties</Text>
-            <TextInput 
-              style={styles.inputBox} 
-              placeholder='0.00' 
-              keyboardType='numeric'
-              onChangeText={input => ValidateInput(input, 'other')}
-              value={other}
-            />
-            {linebreak}
-            <Button title="Create budget" onPress={() => finalCheck(data)}/>
+    (!user.emailVerified) ? (
+      <SafeAreaView style={styles.newBudgetContainer}>
+        <View>
+          <View style={styles.newBudgetHeader}>
+            <Text style={{ fontSize: 25, fontWeight: '600' }}>Budget info</Text>
+            <Button title="Cancel" onPress={() => navigation.navigate('Budgets')} />
+          </View>
+          {headerbreak}
+          <View style={styles.newBudget}>
+            <Text style={{ fontSize: 30, textAlign: "center" }}>
+              You must verify your email before making a budget.
+            </Text>
           </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    ) : (
+      <SafeAreaView style={styles.newBudgetContainer}>
+        <View>
+          <View style={styles.newBudgetHeader}>
+            <Text style={{ fontSize: 25, fontWeight: '600' }}>Budget info</Text>
+            <Button title="Cancel" onPress={() => navigation.navigate('Budgets')} />
+          </View>
+          {headerbreak}
+          <View style={styles.newBudget}>
+            <Text style={{ fontStyle: 'italic', fontSize: 15 }}>
+              Please enter all of your info honestly based on a monthly timeframe.
+              Your data will not be sold to anyone or used for any purposes unrelated to this app
+            </Text>
+            {linebreak}
+            <View style={styles.inputContainer}>
+              <Text style={{ fontSize: 15, fontWeight: '500' }}>Income after tax</Text>
+              <TextInput
+                style={styles.inputBox}
+                placeholder='0.00'
+                keyboardType='numeric'
+                onChangeText={input => ValidateInput(input, 'income')}
+                value={income}
+              />
+              <Text style={{ fontSize: 15, fontWeight: '500' }}>Rent and/or bills</Text>
+              <TextInput
+                style={styles.inputBox}
+                placeholder='0.00'
+                keyboardType='numeric'
+                onChangeText={input => ValidateInput(input, 'rent/bills')}
+                value={rentOrBills}
+              />
+              <Text style={{ fontSize: 15, fontWeight: '500' }}>Groceries</Text>
+              <TextInput
+                style={styles.inputBox}
+                placeholder='0.00'
+                keyboardType='numeric'
+                onChangeText={input => ValidateInput(input, 'groceries')}
+                value={groceries}
+              />
+              <Text style={{ fontSize: 15, fontWeight: '500' }}>Insurance</Text>
+              <TextInput
+                style={styles.inputBox}
+                placeholder='0.00'
+                keyboardType='numeric'
+                onChangeText={input => ValidateInput(input, 'insurance')}
+                value={insurance}
+              />
+              <Text style={{ fontSize: 15, fontWeight: '500' }}>Other necesseties</Text>
+              <TextInput
+                style={styles.inputBox}
+                placeholder='0.00'
+                keyboardType='numeric'
+                onChangeText={input => ValidateInput(input, 'other')}
+                value={other}
+              />
+              {linebreak}
+              <Button title="Create budget" onPress={() => finalCheck(data)} />
+            </View>
+          </View>
+        </View>
+      </SafeAreaView>
+    )
   );
 }
 
@@ -134,37 +154,39 @@ const CreateNewBudget = (data) => {
   // Retrieve user doc
   const collectionRef = collection(db, 'users', user.uid, 'budgets');
 
-  // Check if max budgets reached and if alread exists (self-invoking async function)
+  // Check if max budgets reached and if already exists (self-invoking async function)
   (async () => {
     let successful = true;
     let count = 0;
 
     const q = query(collectionRef);
     const querySnapshot = await getDocs(q);
-    
+
     querySnapshot.forEach(doc => {
       count++;
       if (count >= 5) {
         alert('Max budgets reached');
         successful = false;
       }
-      if (checkBudgetID(doc.id)){
+      if (checkBudgetID(doc.id)) {
         alert('Budget already exists');
         successful = false;
       }
+
+
     });
 
     // Add budget to db if it passes all checks
     if (successful) {
       const docData = setDocData(count);
       setDoc(doc(collectionRef, hash), docData)
-      .then(() => {
+        .then(() => {
 
-        alert('Budget created successfully!');
-      })
-      .catch(error => {
-        console.error(error);
-      })
+          alert('Budget created successfully!');
+        })
+        .catch(error => {
+          console.error(error);
+        })
     }
   })();
 
@@ -176,15 +198,15 @@ const CreateNewBudget = (data) => {
     return false;
   }
 
-   // Set budget to be added
+  // Set budget to be added
   const setDocData = (id) => {
     // Budget math
     const n = Number;
-    const incN = n(income)*100; 
-    const rentN = n(rentOrBills)*100;
-    const groceriesN = n(groceries)*100;
-    const insuranceN = n(insurance)*100;
-    const otherN = n(other)*100;
+    const incN = n(income) * 100;
+    const rentN = n(rentOrBills) * 100;
+    const groceriesN = n(groceries) * 100;
+    const insuranceN = n(insurance) * 100;
+    const otherN = n(other) * 100;
 
     const left = incN - rentN - groceriesN - insuranceN - otherN;
 
