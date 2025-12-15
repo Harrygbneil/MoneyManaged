@@ -1,24 +1,28 @@
 import { StyleSheet, Text, SafeAreaView, View } from 'react-native';
-import { useRoute } from '@react-navigation/native';
 import Navbar from './Navbar';
+
+import { firebaseAuth } from "../configs/firebaseConfig.js"
+import SummarisedBudgets from './SummarisedBudgets.js';
 
 const Home = () => {
   // Get user profile data
-  const route = useRoute();
-  const user = route.params.user;
+  const auth = firebaseAuth;
+  const user = auth.currentUser;
+
+  const linebreak = <SafeAreaView style={{ borderWidth: 1, backgroundColor: '#000000', marginTop: 8 }}></SafeAreaView>;
 
   return (
     <SafeAreaView style={styles.homeContainer}>
       <View>
         <View style={styles.welcomeMessage}>
-          <Text style={{fontSize: 20, fontWeight: '600', color: 'white'}}>Welcome {user.displayName}!</Text>
-          <Text style={{fontSize: 15, fontStyle: 'italic', color: 'white'}}>If you have any questions, you can reach us from the settings page</Text>
+          <Text style={{fontSize: 25, fontWeight: '800'}}>Welcome {user.displayName}!</Text>
+          <Text style={{fontSize: 15, fontStyle: 'italic'}}>If you have any questions, you can reach us from the settings page</Text>
         </View>
+        {linebreak}
         <View style={styles.summarisedBudgets}>
-          <Text>No budgets!</Text>
-          {/* This will contain summarised goals */}
+          <SummarisedBudgets />
         </View>
-        <Navbar user={user}/>
+        <Navbar />
       </View>
     </SafeAreaView>
   )
@@ -29,6 +33,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 5,
     marginVertical: 5,
+    marginHorizontal: 10,
     backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center'
@@ -37,17 +42,12 @@ const styles = StyleSheet.create({
     height: 80,
     padding: 8,
     justifyContent: 'flex-start',
-    borderRadius: 10,
-    backgroundColor: '#6A6B83',
-    borderColor: '#6A6B83'
   },
   summarisedBudgets: {
     flex: 9,
-    marginTop: 15,
-    padding: 8,
+    marginTop: 5,
     borderRadius: 10,
     justifyContent: 'flex-start',
-    backgroundColor: '#FECDAA'
   },
 });
  

@@ -28,8 +28,8 @@ const Signup = () => {
     .then(() => setUserProfile(userName, email, auth.currentUser.uid))
     .catch(error => {
       console.error(error.message); 
-      alert('Sign up failed, please ensure a valid email and password');
       setLoading(false);
+      alert('Sign up failed, please ensure a valid email and password');
     })
   };
 
@@ -62,9 +62,27 @@ const Signup = () => {
     <SafeAreaView style={styles.signUpContainer}>
       <Text style={{fontSize: 60, textAlign: 'center', marginBottom: 10}}>Sign up</Text>
       <View style={styles.inputBoxContainer}>
-        <TextInput style={styles.inputBox} placeholder='Username' onChangeText={setEnteredUserName} value={enteredUserName}></TextInput>
-        <TextInput style={styles.inputBox} placeholder='Email' onChangeText={setEnteredEmail} value={enteredEmail}></TextInput>
-        <TextInput style={styles.inputBox} placeholder='Password' onChangeText={setEnteredPassword} value={enteredPassword}></TextInput>
+        <TextInput 
+          style={styles.inputBox} 
+          placeholder='Username' 
+          onChangeText={setEnteredUserName} 
+          value={enteredUserName}
+        />
+        <TextInput 
+          style={styles.inputBox} 
+          placeholder='Email' 
+          onChangeText={setEnteredEmail} 
+          value={enteredEmail}
+          autoCapitalize='none'
+        />
+        <TextInput 
+          style={styles.inputBox} 
+          placeholder='Password' 
+          onChangeText={setEnteredPassword} 
+          value={enteredPassword}
+          secureTextEntry={true}
+          autoCapitalize='none'
+        />
         <Text style ={styles.passwordText}>Min 8 characters long, At least 1 special character, 1 number and 1 uppercase character</Text>
       </View>
       <View style={styles.buttonContainer}>

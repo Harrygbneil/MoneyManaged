@@ -1,27 +1,26 @@
 import { SafeAreaView, View, StyleSheet, Text, Button } from "react-native";
-import { useRoute, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 import Navbar from "./Navbar";
+import BudgetsLoader from "./BudgetsLoader.js";
 
 const Budgets = () => {
-  // Get user profile data
-  const route = useRoute();
-  const user = route.params.user;
-
   const navigation = useNavigation();
+
+  const linebreak = <SafeAreaView style={{ borderWidth: 1, backgroundColor: '#000000', marginTop: 8 }}></SafeAreaView>;
 
   return (
     <SafeAreaView style={styles.budgetsContainer}>
       <View>
         <View style={styles.budgetHeader}>
           <Text style={{fontSize: 25, fontWeight: '600'}}>Budgets</Text>
-          <Button title="New budget" onPress={() => navigation.navigate('NewBudget', { user: user })}/>
+          <Button title="New budget" onPress={() => navigation.navigate('NewBudget')}/>
         </View>
+        {linebreak}
         <View style={styles.budgets}>
-          <Text>test to see if user data is carried</Text>
-          <Text>{user.displayName}</Text>
+          <BudgetsLoader />
         </View>
-        <Navbar user={user}/>
+        <Navbar />
       </View>
     </SafeAreaView>
   );
@@ -31,6 +30,7 @@ const styles = StyleSheet.create({
   budgetsContainer: {
     flex: 1,
     padding: 5,
+    marginHorizontal: 10,
     marginVertical: 5,
     backgroundColor: '#ffffff',
     alignItems: 'center',
@@ -38,14 +38,11 @@ const styles = StyleSheet.create({
   },
   budgets: {
     flex: 9,
-    padding: 8,
     borderRadius: 10,
-    backgroundColor: '#FECDAA'
   },
   budgetHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: 10,
     padding: 8,
   },
 });
